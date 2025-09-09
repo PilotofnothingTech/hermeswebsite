@@ -1,0 +1,295 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Mission - Project Hermes</title>
+  <meta name="description" content="Student rocketry team — engineering, research, and competition projects." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#0a0f1a;          /* deep navy */
+      --card:#0f1624;       /* slightly lighter navy */
+      --ink:#e6f0ff;        /* light ink */
+      --muted:#91a4c9;      /* muted text */
+      --brand:#3ea6ff;      /* accent blue */
+      --brand-2:#6cfacb;    /* accent mint */
+      --line:rgba(255,255,255,.08);
+      --shadow:0 10px 30px rgba(0,0,0,.35);
+      --radius:20px;
+      --speed:.25s;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%}
+    body{font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Helvetica Neue",Arial,sans-serif;background:radial-gradient(80% 60% at 10% 10%, #0d1a2b 0%, var(--bg) 60%) fixed;color:var(--ink);line-height:1.6}
+    a{color:inherit;text-decoration:none}
+    img{max-width:100%;display:block}
+
+    /* Layout */
+    .container{width:min(1200px,92%);margin-inline:auto}
+    header{position:sticky;top:0;backdrop-filter:blur(8px);background:linear-gradient(180deg, rgba(10,15,26,.9), rgba(10,15,26,.6));border-bottom:1px solid var(--line);z-index:50}
+    .nav{display:flex;align-items:center;justify-content:space-between;padding:.9rem 0}
+    .brand{display:flex;align-items:center;gap:.75rem;font-weight:800;letter-spacing:.3px}
+    .brand-mark{width:34px;height:34px;border-radius:9px;background:conic-gradient(from 210deg, var(--brand), var(--brand-2));box-shadow:0 0 0 2px rgba(255,255,255,.08) inset}
+    .brand span{opacity:.9}
+    .menu{display:flex;gap:1.25rem}
+    .menu a{color:var(--muted);font-weight:600;position:relative}
+    .menu a:hover,.menu a.active{color:var(--ink)}
+    .menu a.active::after,.menu a:hover::after{content:"";position:absolute;left:0;right:0;bottom:-8px;height:2px;background:linear-gradient(90deg,var(--brand),var(--brand-2))}
+    .burger{display:none;flex-direction:column;gap:5px}
+    .burger span{width:26px;height:2px;background:var(--ink)}
+
+    /* Hero */
+    .hero{padding:clamp(72px,8vw,110px) 0 48px;position:relative;overflow:hidden}
+    .hero-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:48px;align-items:center}
+    .kicker{color:var(--brand);font-weight:700;letter-spacing:.2em;font-size:.75rem;text-transform:uppercase}
+    .title{font-size:clamp(2rem,4.2vw,3.25rem);line-height:1.1;font-weight:800;margin:.5rem 0 1rem}
+    .subtitle{color:var(--muted);max-width:60ch}
+    .cta-row{display:flex;gap:.8rem;margin-top:1.4rem}
+    .btn{display:inline-flex;align-items:center;gap:.55rem;padding:.8rem 1.1rem;border-radius:12px;background:var(--brand);color:#08111e;font-weight:800;box-shadow:var(--shadow);transition:transform var(--speed)}
+    .btn:hover{transform:translateY(-2px)}
+    .btn.secondary{background:transparent;color:var(--ink);border:1px solid var(--line);box-shadow:none}
+
+    .hero-card{background:linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.00));border:1px solid var(--line);border-radius:var(--radius);padding:22px;box-shadow:var(--shadow)}
+    .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:18px}
+    .stat{background:var(--card);border:1px solid var(--line);padding:16px;border-radius:14px;text-align:center}
+    .stat b{font-size:1.5rem}
+    .glow{position:absolute;inset:-30% -10% auto auto;width:60vw;height:60vw;background:radial-gradient(closest-side, rgba(62,166,255,.25), rgba(108,250,203,.18), transparent 70%);filter:blur(20px);pointer-events:none}
+
+    /* Sections */
+    section{padding:72px 0;border-top:1px solid var(--line)}
+    .section-title{font-size:1.75rem;margin-bottom:10px}
+    .section-lead{color:var(--muted);max-width:65ch;margin-bottom:26px}
+
+    /* Cards grid */
+    .grid{display:grid;gap:18px}
+    .grid.cards{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+    .card{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden;display:flex;flex-direction:column;transition:transform var(--speed)}
+    .card:hover{transform:translateY(-4px)}
+    .card img{aspect-ratio:16/9;object-fit:cover}
+    .card .p{padding:16px}
+    .chip{display:inline-block;font-size:.75rem;color:#08111e;background:linear-gradient(90deg,var(--brand),var(--brand-2));padding:.25rem .55rem;border-radius:999px;font-weight:700}
+
+    /* Rocket section */
+    .rocket{position:relative}
+    .rocket .specs{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-top:18px}
+    .spec{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px}
+    .spec small{display:block;color:var(--muted);font-weight:600;letter-spacing:.08em;text-transform:uppercase}
+    .spec b{font-size:1.35rem}
+    .rocket-wrap{display:grid;grid-template-columns:1.1fr .9fr;gap:32px;align-items:center}
+    .rocket .callout{background:linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.00));border:1px solid var(--line);border-radius:var(--radius);padding:18px}
+    .rocket .list{display:grid;gap:10px;margin-top:10px}
+    .rocket .list li{background:var(--card);border:1px dashed var(--line);border-radius:12px;padding:10px 12px}
+
+    /* Subteams */
+    .subteams .item{padding:18px;border-radius:14px;background:linear-gradient(180deg, rgba(255,255,255,.02), transparent);border:1px dashed var(--line)}
+    .subteams h4{margin:.35rem 0}
+    .subteams p{color:var(--muted);font-size:.95rem}
+
+   /* Sponsors ribbon */
+.ribbon {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.00));
+}
+
+.marquee {
+  display: flex;
+  gap: 48px;
+  align-items: center;
+  padding: 16px;
+  animation: scroll 28s linear infinite;
+}
+
+.marquee img {
+  height: 38px;
+  opacity: 0.9;
+  filter: brightness(0) invert(1); /* makes logos white */
+}
+
+@keyframes scroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+    /* Footer */
+    footer{border-top:1px solid var(--line);padding:32px 0 48px;color:var(--muted)}
+    .foot-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:24px}
+    .foot-grid a{color:var(--ink)}
+
+    /* Responsive */
+    @media (max-width:900px){
+      .hero-grid{grid-template-columns:1fr}
+      .stats{grid-template-columns:repeat(3,1fr)}
+      .menu{display:none}
+      .burger{display:flex}
+      .menu.open{position:absolute;left:0;right:0;top:60px;background:var(--card);border-bottom:1px solid var(--line);display:grid;padding:12px}
+      .foot-grid{grid-template-columns:1fr}
+      .rocket-wrap{grid-template-columns:1fr}
+    }
+    body{background:#0b1220;color:#e9f0ff;line-height:1.6;font-family:Inter,"Noto Sans",system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Helvetica Neue",Arial,sans-serif;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+    .container{width:min(1100px,92%);margin-inline:auto}
+    header{position:sticky;top:0;background:rgba(11,18,32,.72);backdrop-filter:blur(8px);border-bottom:1px solid rgba(255,255,255,.08);z-index:50}
+    .nav{display:flex;align-items:center;justify-content:space-between;padding:.9rem 0}
+    .brand{display:flex;align-items:center;gap:.6rem;font-weight:800}
+    .brand-mark{width:30px;height:30px;border-radius:8px;background:conic-gradient(from 210deg,#3ea6ff,#6cfacb)}
+    .menu{display:flex;gap:1.1rem}
+    .menu a{color:#9fb2d9;font-weight:600}
+    .menu a.active,.menu a:hover{color:#e9f0ff}
+    .burger{display:none;flex-direction:column;gap:5px}
+    .burger span{width:26px;height:2px;background:#e9f0ff}
+    @media(max-width:960px){.menu{display:none}.burger{display:flex}.menu.open{position:absolute;left:0;right:0;top:56px;background:#0f182a;border-bottom:1px solid rgba(255,255,255,.08);display:grid;padding:12px}}
+
+    .hero{padding:72px 0;background:radial-gradient(1200px 420px at 70% -100px,rgba(68,139,255,.15),transparent),#0b1220}
+    .title{font-size:clamp(1.9rem,4.2vw,2.6rem);line-height:1.15;font-weight:800}
+    .subtitle{color:#9fb2d9;max-width:72ch}
+    .kicker{color:#3ea6ff;font-weight:800;letter-spacing:.2em;text-transform:uppercase;font-size:.75rem}
+
+    section{padding:54px 0;border-top:1px solid rgba(255,255,255,.08)}
+    .grid{display:grid;gap:18px}
+    .two{grid-template-columns:1.05fr .95fr}
+    .three{grid-template-columns:repeat(3,1fr)}
+    .four{grid-template-columns:repeat(4,1fr)}
+    @media(max-width:960px){.two,.three,.four{grid-template-columns:1fr}}
+
+    .panel{background:#0f182a;border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:18px}
+    .section-title{font-size:1.6rem;margin-bottom:8px}
+    .muted{color:#9fb2d9}
+
+    .pill{background:#111a2c;border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:12px}
+    .stat{background:#0b1426;border:1px dashed rgba(255,255,255,.12);border-radius:12px;padding:14px;text-align:center}
+    .stat b{font-size:1.6rem;display:block}
+
+    .timeline{position:relative;padding-left:18px}
+    .timeline::before{content:"";position:absolute;left:7px;top:4px;bottom:4px;width:2px;background:linear-gradient(#3ea6ff,#6cfacb)}
+    .mile{position:relative;margin:10px 0;padding-left:14px}
+    .mile::before{content:"";position:absolute;left:-12px;top:.45rem;width:10px;height:10px;border-radius:50%;background:#3ea6ff;box-shadow:0 0 0 3px rgba(62,166,255,.25)}
+
+    footer{border-top:1px solid rgba(255,255,255,.08);padding:28px 0;color:#9fb2d9}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container nav">
+      <a class="brand" href="index.html"><div class="brand-mark"></div><span>Project Hermes</span></a>
+      <nav class="menu" id="menu">
+        <a href="index.html">Home</a>
+        <a href="rockets.html">Rockets</a>
+        <a href="our-team.html">Team</a>
+        <a href="ourmission.html" class="active">Mission</a>
+        <a href="headquarters.html">HQ</a>
+      </nav>
+      <button class="burger" id="burger" aria-label="Open menu"><span></span><span></span><span></span></button>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container">
+        <div class="kicker">Purpose</div>
+        <h1 class="title">Advance student rocketry through rigorous engineering, open processes, and repeatable results.</h1>
+        <p class="subtitle">Project Hermes, launched in 2024 by Team Hephaestus and SimUoPLabs, exists to design, manufacture, and fly safe, reliable rockets while developing the next generation of aerospace engineers. Our near‑term focus is CRC 2025.</p>
+      </div>
+    </section>
+
+    <section>
+      <div class="container grid two">
+        <div class="panel">
+          <h2 class="section-title">Mission statement</h2>
+          <p>We build knowledge and capability by executing complete rocket programs — from requirements to recovery — sharing methods and tooling so others can follow. Every design choice is traceable to flight data, simulation, or test.</p>
+          <div class="grid two" style="margin-top:10px">
+            <div class="pill"><strong>Safety by design</strong><br><span class="muted">Procedures, checklists, and peer reviews.</span></div>
+            <div class="pill"><strong>Reliability first</strong><br><span class="muted">Simple systems, tested often.</span></div>
+            <div class="pill"><strong>Teaching lab</strong><br><span class="muted">Hands‑on roles across disciplines.</span></div>
+            <div class="pill"><strong>Open culture</strong><br><span class="muted">Docs, CAD, and data where possible.</span></div>
+          </div>
+        </div>
+        <div class="panel">
+          <h2 class="section-title">CRC 2025 objectives</h2>
+          <ul class="muted" style="margin:0 0 8px 18px">
+            <li>Achieve stable flight to ~700 m apogee (±10%).</li>
+            <li>Demonstrate safe recovery via toroidal parachute + spring ejector.</li>
+            <li>Transmit live telemetry at ~30 Hz and log full flight data.</li>
+            <li>Complete field ops using checklists and timed rehearsals.</li>
+          </ul>
+          <div class="grid four" style="margin-top:10px">
+            <div class="stat"><b>≤ 6.5 m/s</b><span class="muted">target descent</span></div>
+            <div class="stat"><b>≥ 95%</b><span class="muted">checklist pass</span></div>
+            <div class="stat"><b>≤ 30 min</b><span class="muted">pad turnaround</span></div>
+            <div class="stat"><b>100%</b><span class="muted">data capture</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="container grid three">
+        <article class="panel">
+          <h2 class="section-title">Pillars</h2>
+          <p class="muted">Four focus areas that move the mission forward.</p>
+          <ul class="muted" style="margin:0 0 0 18px">
+            <li>Design & Simulation — CAD, stability, CFD.</li>
+            <li>Manufacturing — printing, assembly, QA.</li>
+            <li>Avionics & Telemetry — flight computer, links, ground.</li>
+            <li>Operations — procedures, rehearsals, safety.</li>
+          </ul>
+        </article>
+        <article class="panel">
+          <h2 class="section-title">Roadmap</h2>
+          <div class="timeline">
+            <div class="mile"><strong>Q4 2024:</strong> Team formation, toolchain setup, baseline simulations.</div>
+            <div class="mile"><strong>Q1 2025:</strong> Prototype airframe + ejection device; bench tests.</div>
+            <div class="mile"><strong>Q2 2025:</strong> Integrated ground tests; drop tests; telemetry link.</div>
+            <div class="mile"><strong>Q3 2025:</strong> Flight readiness review; CRC 2025 launch.</div>
+          </div>
+        </article>
+        <article class="panel">
+          <h2 class="section-title">How we measure</h2>
+          <ul class="muted" style="margin:0 0 0 18px">
+            <li>Requirement coverage (design ↔ tests ↔ flight data).</li>
+            <li>Ops reproducibility (variance in task times).</li>
+            <li>Failure‑mode closure (actions completed).</li>
+            <li>Skill growth (new roles certified).</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section>
+      <div class="container grid two" style="align-items:center">
+        <div>
+          <h2 class="section-title">Call for partners</h2>
+          <p class="muted">We partner with companies and labs that share our focus on disciplined engineering. Support can include materials, fabrication time, software licenses, or technical mentorship.</p>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px">
+            <a class="btn" href="mailto:projecthermesuop@gmail.com">Become a partner</a>
+            <a class="btn secondary" href="mailto:projecthermesuop@gmail.com">Contact us</a>
+          </div>
+        </div>
+        <div class="panel">
+          <strong>What we offer</strong>
+          <ul class="muted" style="margin:.5rem 0 0 18px">
+            <li>Brand visibility (site, rocket, events).</li>
+            <li>Student recruiting & capstone projects.</li>
+            <li>Data from tests and flights.</li>
+            <li>Talks/workshops for your team.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container"><p style="color:#9fb2d9">© 2025 Project Hermes</p></div>
+  </footer>
+
+  <script>
+    const burger=document.getElementById('burger');
+    const menu=document.getElementById('menu');
+    burger?.addEventListener('click',()=>menu.classList.toggle('open'));
+  </script>
+</body>
+</html>

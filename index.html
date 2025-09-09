@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Project Hermes</title>
+  <meta name="description" content="Student rocketry team — engineering, research, and competition projects." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#0a0f1a;          /* deep navy */
+      --card:#0f1624;       /* slightly lighter navy */
+      --ink:#e6f0ff;        /* light ink */
+      --muted:#91a4c9;      /* muted text */
+      --brand:#3ea6ff;      /* accent blue */
+      --brand-2:#6cfacb;    /* accent mint */
+      --line:rgba(255,255,255,.08);
+      --shadow:0 10px 30px rgba(0,0,0,.35);
+      --radius:20px;
+      --speed:.25s;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%}
+    body{font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Helvetica Neue",Arial,sans-serif;background:radial-gradient(80% 60% at 10% 10%, #0d1a2b 0%, var(--bg) 60%) fixed;color:var(--ink);line-height:1.6}
+    a{color:inherit;text-decoration:none}
+    img{max-width:100%;display:block}
+
+    /* Layout */
+    .container{width:min(1200px,92%);margin-inline:auto}
+    header{position:sticky;top:0;backdrop-filter:blur(8px);background:linear-gradient(180deg, rgba(10,15,26,.9), rgba(10,15,26,.6));border-bottom:1px solid var(--line);z-index:50}
+    .nav{display:flex;align-items:center;justify-content:space-between;padding:.9rem 0}
+    .brand{display:flex;align-items:center;gap:.75rem;font-weight:800;letter-spacing:.3px}
+    .brand-mark{width:34px;height:34px;border-radius:9px;background:conic-gradient(from 210deg, var(--brand), var(--brand-2));box-shadow:0 0 0 2px rgba(255,255,255,.08) inset}
+    .brand span{opacity:.9}
+    .menu{display:flex;gap:1.25rem}
+    .menu a{color:var(--muted);font-weight:600;position:relative}
+    .menu a:hover,.menu a.active{color:var(--ink)}
+    .menu a.active::after,.menu a:hover::after{content:"";position:absolute;left:0;right:0;bottom:-8px;height:2px;background:linear-gradient(90deg,var(--brand),var(--brand-2))}
+    .burger{display:none;flex-direction:column;gap:5px}
+    .burger span{width:26px;height:2px;background:var(--ink)}
+
+    /* Hero */
+    .hero{padding:clamp(72px,8vw,110px) 0 48px;position:relative;overflow:hidden}
+    .hero-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:48px;align-items:center}
+    .kicker{color:var(--brand);font-weight:700;letter-spacing:.2em;font-size:.75rem;text-transform:uppercase}
+    .title{font-size:clamp(2rem,4.2vw,3.25rem);line-height:1.1;font-weight:800;margin:.5rem 0 1rem}
+    .subtitle{color:var(--muted);max-width:60ch}
+    .cta-row{display:flex;gap:.8rem;margin-top:1.4rem}
+    .btn{display:inline-flex;align-items:center;gap:.55rem;padding:.8rem 1.1rem;border-radius:12px;background:var(--brand);color:#08111e;font-weight:800;box-shadow:var(--shadow);transition:transform var(--speed)}
+    .btn:hover{transform:translateY(-2px)}
+    .btn.secondary{background:transparent;color:var(--ink);border:1px solid var(--line);box-shadow:none}
+
+    .hero-card{background:linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.00));border:1px solid var(--line);border-radius:var(--radius);padding:22px;box-shadow:var(--shadow)}
+    .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:18px}
+    .stat{background:var(--card);border:1px solid var(--line);padding:16px;border-radius:14px;text-align:center}
+    .stat b{font-size:1.5rem}
+    .glow{position:absolute;inset:-30% -10% auto auto;width:60vw;height:60vw;background:radial-gradient(closest-side, rgba(62,166,255,.25), rgba(108,250,203,.18), transparent 70%);filter:blur(20px);pointer-events:none}
+
+    /* Sections */
+    section{padding:72px 0;border-top:1px solid var(--line)}
+    .section-title{font-size:1.75rem;margin-bottom:10px}
+    .section-lead{color:var(--muted);max-width:65ch;margin-bottom:26px}
+
+    /* Cards grid */
+    .grid{display:grid;gap:18px}
+    .grid.cards{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+    .card{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden;display:flex;flex-direction:column;transition:transform var(--speed)}
+    .card:hover{transform:translateY(-4px)}
+    .card img{aspect-ratio:16/9;object-fit:cover}
+    .card .p{padding:16px}
+    .chip{display:inline-block;font-size:.75rem;color:#08111e;background:linear-gradient(90deg,var(--brand),var(--brand-2));padding:.25rem .55rem;border-radius:999px;font-weight:700}
+
+    /* Rocket section */
+    .rocket{position:relative}
+    .rocket .specs{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-top:18px}
+    .spec{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px}
+    .spec small{display:block;color:var(--muted);font-weight:600;letter-spacing:.08em;text-transform:uppercase}
+    .spec b{font-size:1.35rem}
+    .rocket-wrap{display:grid;grid-template-columns:1.1fr .9fr;gap:32px;align-items:center}
+    .rocket .callout{background:linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.00));border:1px solid var(--line);border-radius:var(--radius);padding:18px}
+    .rocket .list{display:grid;gap:10px;margin-top:10px}
+    .rocket .list li{background:var(--card);border:1px dashed var(--line);border-radius:12px;padding:10px 12px}
+
+    /* Subteams */
+    .subteams .item{padding:18px;border-radius:14px;background:linear-gradient(180deg, rgba(255,255,255,.02), transparent);border:1px dashed var(--line)}
+    .subteams h4{margin:.35rem 0}
+    .subteams p{color:var(--muted);font-size:.95rem}
+
+   /* Sponsors ribbon */
+.ribbon {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.00));
+}
+
+.marquee {
+  display: flex;
+  gap: 48px;
+  align-items: center;
+  padding: 16px;
+  animation: scroll 28s linear infinite;
+}
+
+.marquee img {
+  height: 38px;
+  opacity: 0.9;
+  filter: brightness(0) invert(1); /* makes logos white */
+}
+
+@keyframes scroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+    /* Footer */
+    footer{border-top:1px solid var(--line);padding:32px 0 48px;color:var(--muted)}
+    .foot-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:24px}
+    .foot-grid a{color:var(--ink)}
+
+    /* Responsive */
+    @media (max-width:900px){
+      .hero-grid{grid-template-columns:1fr}
+      .stats{grid-template-columns:repeat(3,1fr)}
+      .menu{display:none}
+      .burger{display:flex}
+      .menu.open{position:absolute;left:0;right:0;top:60px;background:var(--card);border-bottom:1px solid var(--line);display:grid;padding:12px}
+      .foot-grid{grid-template-columns:1fr}
+      .rocket-wrap{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container nav">
+      <a class="brand" href="#top" aria-label="Project Hermes home">
+        <div class="brand-mark" aria-hidden="true"></div>
+        <span>Project Hermes</span>
+      </a>
+      <nav class="menu" id="menu">
+        <a href="index.html" class="active">Home</a>
+        <a href="rockets.html">Rockets</a>
+        <a href="our-team.html">Team</a>
+        <a href="ourmission.html">Mission</a>
+        <a href="headquarters.html">HQ</a>
+      </nav>
+      <button class="burger" id="burger" aria-label="Open menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <main id="top">
+    <div class="glow"></div>
+    <section class="hero">
+      <div class="container hero-grid">
+        <div>
+          <div class="kicker">Student Rocketry Team</div>
+          <h1 class="title">Design • Build • Launch</h1>
+          <p class="subtitle">We are a multidisciplinary team advancing aerospace innovation through hands‑on engineering, research, and competition.</p>
+          <div class="cta-row">
+            <a class="btn" href="our-team.html">Join the Team</a>
+            <a class="btn secondary" href="#rocket">See the Rocket</a>
+          </div>
+          <div class="stats">
+            <div class="stat"><b>15+</b><br><span class="muted">Active members</span></div>
+            <div class="stat"><b>2026</b><br><span class="muted">EuRoC target</span></div>
+            <div class="stat"><b>5</b><br><span class="muted">Sub‑teams</span></div>
+          </div>
+        </div>
+        <div>
+          <div class="hero-card">
+            <img src="rocket_backround_removed.png" alt="Rocket render" />
+            <div class="p">
+              <span class="chip">Latest</span>
+              <h3 style="margin:.5rem 0 0">Enarxis Flight Hardware</h3>
+              <p class="subtitle">Lightweight structures, telemetry, and an aerodynamic package engineered for competition.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="about">
+      <div class="container">
+        <h2 class="section-title">What we do</h2>
+        <p class="section-lead">From preliminary design and simulation to manufacturing, testing, and launch operations — we own the entire lifecycle.</p>
+        <div class="grid cards">
+          <article class="card">
+            <img src="cad_bg_remove.png" alt="CAD design" />
+            <div class="p">
+              <h3>Design & Simulation</h3>
+              <p class="subtitle">Aerodynamics, structures, and systems modeled and validated before a single cut.</p>
+            </div>
+          </article>
+          <article class="card">
+            <img src="manufacturing_bg_remove.png" alt="Manufacturing" />
+            <div class="p">
+              <h3>Manufacturing</h3>
+              <p class="subtitle">Composite layups, CNC, and additive manufacturing for flight‑ready parts.</p>
+            </div>
+          </article>
+          <article class="card">
+            <img src="avionics_telemetry_bg_removed.png" alt="Telemetry" />
+            <div class="p">
+              <h3>Avionics & Telemetry</h3>
+              <p class="subtitle">Real‑time sensing, data links, and embedded software for safe operations.</p>
+            </div>
+          </article>
+          <article class="card">
+            <img src="operations_icon-removebg.png" alt="Operations" />
+            <div class="p">
+              <h3>Operations</h3>
+              <p class="subtitle">Checklists, rehearsals, and flight‑test plans to deliver repeatable outcomes.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Rocket Section -->
+    <section id="rocket" class="rocket">
+      <div class="container rocket-wrap">
+        <div>
+          <h2 class="section-title">Rocket — <span style="color:var(--brand)">Enarxis</span></h2>
+          <p class="section-lead">CRC 2025 water‑payload rocket designed for reliability and simplicity: low cost, easy to manufacture, and repeatable performance. Built by students, flown by procedure.</p>
+
+          <div class="specs">
+            <div class="spec"><small>Length</small><b>830 mm</b></div>
+            <div class="spec"><small>Body Diameter</small><b>49 mm</b></div>
+            <div class="spec"><small>Dry Mass</small><b>675 g</b></div>
+            <div class="spec"><small>Lift‑off Mass</small><b>1062 g</b></div>
+            <div class="spec"><small>Expected Apogee</small><b>691 m</b></div>
+            <div class="spec"><small>Descent Speed</small><b>~6.3 m/s</b></div>
+          </div>
+
+          <div class="callout" style="margin-top:16px">
+            <strong>Systems overview</strong>
+            <ul class="list">
+              <li><b>Airframe:</b> 3D‑printed ABS+ structure, bayonet twist‑lock bulkheads, rail buttons; fins bonded with cyanoacrylate.</li>
+              <li><b>Payload (water):</b> 216 ml (~216 g) enclosed in flexible bladder with spacer to minimize slosh; compartment compression to lock payload.</li>
+              <li><b>Avionics:</b> Arduino Nano 33 BLE Sense Rev2, SD module, SX1278 LoRa 433 MHz, 2S Li‑ion battery, 3.3 V regulator, buzzer & driver.</li>
+              <li><b>Recovery:</b> spring‑loaded ejection with servo‑latched pin; toroidal parachute; backup deploy if no apogee after 15 s.</li>
+              <li><b>Ground station:</b> matching SX1278 LoRa link via Raspberry Pi Pico W bridge; high‑gain loaded antenna.</li>
+            </ul>
+            <div class="cta-row" style="margin-top:12px">
+              <a class="btn" href="rockets.html">Open full rocket page</a>
+              <a class="btn secondary" href="#sponsors">Support the mission</a>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="hero-card">
+            <img src="Enarxis_Rocket_Diagram.png" alt="Enarxis silhouette" />
+            <div class="p">
+              <span class="chip">Spec Preview</span>
+              <h3 style="margin:.5rem 0 0">Airframe & Avionics Bay</h3>
+              <p class="subtitle">Modular printed sections for rapid ground ops and easy maintenance.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="subteams" class="subteams">
+      <div class="container">
+        <h2 class="section-title">Sub‑teams</h2>
+        <p class="section-lead">Clear ownership, fast iterations. Meet the crews that make launches happen.</p>
+        <div class="grid cards">
+          <div class="item">
+            <span class="chip">CFD</span>
+            <span class="chip">STRUCT</span>
+            <h4>Design and analysis</h4>
+            <p>Simulation‑driven aero surfaces for stability and performance, airframe, ergonomics, statics and durability</p>
+          </div>
+          <div class="item">
+            <span class="chip">REC</span>
+            <h4>Recovery</h4>
+            <p>Parachute design manufacturing and testing, Thrust vetoring, release mechanisms.</p>
+          </div>
+          <div class="item">
+            <span class="chip">AV & PL</span>
+            <h4>Avionics and Payload</h4>
+            <p>Electronics, firmware, sensing, power systems, ground station, payload stracture and operations.</p>
+          </div>
+          <div class="item">
+            <span class="chip">ENG</span>
+            <h4>Engine</h4>
+            <p>Propelant, nozles, motor geometry and safety testing.</p>
+          </div>
+          <div class="item">
+            <span class="chip">MFG</span>
+            <h4>Manufacturing</h4>
+            <p>CNC, composites, additive manufacturing and tooling for production.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="sponsors">
+      <div class="container">
+        <h2 class="section-title">Sponsors</h2>
+        <p class="section-lead">We proudly collaborate with academia and industry. Add your logo to our flight path.</p>
+        <div class="ribbon" aria-label="sponsors logos marquee">
+          <div class="marquee">
+            <!-- Duplicate logos for seamless loop; replace sources with real logos -->
+            <img src="Hephaestus.png" alt="Hephaestus"/>
+            <img src="simuoplabs_bg_remove.png" alt="SimUoPLabs"/>
+            <img src="PCG.png" alt="PCG"/>
+            <img src="altair_bg_removed.png" alt="ALTAIR"/>
+            <img src="solidworks_bg_remove.png" alt="SOLIDWORKS"/>
+            <img src="coffeeverse.png" alt="COFFEEVERSE"/>
+            <img src="ANSYS_logo.png" alt="ANSYS"/>
+            <img src="simtec_bg_remove.png" alt="SIMTEC"/>
+            <img src="Hephaestus.png" alt="copy-Hephaestus"/>
+            <img src="simuoplabs_bg_remove.png" alt="copy-SimUoPLabs"/>
+            <img src="PCG.png" alt="copy-PCG"/>
+            <img src="altair_bg_removed.png" alt="copy-ALTAIR"/>
+            <img src="solidworks_bg_remove.png" alt="copy-SOLIDWORKS"/>
+            <img src="coffeeverse.png" alt="copy-COFFEEVERSE"/>
+            <img src="ANSYS_logo.png" alt="copy-ANSYS"/>
+            <img src="simtec_bg_remove.png" alt="copy-SIMTEC"/>
+          </div>
+        </div>
+        <div class="cta-row" style="margin-top:18px">
+          <a class="btn" href="mailto:projecthermesuop@gmail.com">Become a Sponsor</a>
+          <a class="btn secondary" href="our-team.html">Learn more</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container foot-grid">
+      <div>
+        <div class="brand" style="margin-bottom:.5rem"><div class="brand-mark"></div><span>Project Hermes</span></div>
+        <p>University of the Peloponnese — Patras, Greece</p>
+        <p><a href="mailto:contact@projecthermes.gr">projecthermesuop@gmail.com</a></p>
+      </div>
+      <div>
+        <strong>Quick Links</strong>
+        <div class="grid" style="grid-template-columns:repeat(2,auto);gap:10px;margin-top:.6rem">
+          <a href="Enarxis.html">Enarxis</a>
+          <a href="our-team.html">Our Team</a>
+          <a href="ourmission.html">Our Mission</a>
+          <a href="headquarters.html">Headquarters</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const burger = document.getElementById('burger');
+    const menu = document.getElementById('menu');
+    burger.addEventListener('click', () => menu.classList.toggle('open'));
+  </script>
+</body>
+</html>

@@ -1,0 +1,385 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Enarixs-Project Hermes</title>
+  <meta name="description" content="Student rocketry team — engineering, research, and competition projects." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#0a0f1a;          /* deep navy */
+      --card:#0f1624;       /* slightly lighter navy */
+      --ink:#e6f0ff;        /* light ink */
+      --muted:#91a4c9;      /* muted text */
+      --brand:#3ea6ff;      /* accent blue */
+      --brand-2:#6cfacb;    /* accent mint */
+      --line:rgba(255,255,255,.08);
+      --shadow:0 10px 30px rgba(0,0,0,.35);
+      --radius:20px;
+      --speed:.25s;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%}
+    body{font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Helvetica Neue",Arial,sans-serif;background:radial-gradient(80% 60% at 10% 10%, #0d1a2b 0%, var(--bg) 60%) fixed;color:var(--ink);line-height:1.6}
+    a{color:inherit;text-decoration:none}
+    img{max-width:100%;display:block}
+
+    /* Layout */
+    .container{width:min(1200px,92%);margin-inline:auto}
+    header{position:sticky;top:0;backdrop-filter:blur(8px);background:linear-gradient(180deg, rgba(10,15,26,.9), rgba(10,15,26,.6));border-bottom:1px solid var(--line);z-index:50}
+    .nav{display:flex;align-items:center;justify-content:space-between;padding:.9rem 0}
+    .brand{display:flex;align-items:center;gap:.75rem;font-weight:800;letter-spacing:.3px}
+    .brand-mark{width:34px;height:34px;border-radius:9px;background:conic-gradient(from 210deg, var(--brand), var(--brand-2));box-shadow:0 0 0 2px rgba(255,255,255,.08) inset}
+    .brand span{opacity:.9}
+    .menu{display:flex;gap:1.25rem}
+    .menu a{color:var(--muted);font-weight:600;position:relative}
+    .menu a:hover,.menu a.active{color:var(--ink)}
+    .menu a.active::after,.menu a:hover::after{content:"";position:absolute;left:0;right:0;bottom:-8px;height:2px;background:linear-gradient(90deg,var(--brand),var(--brand-2))}
+    .burger{display:none;flex-direction:column;gap:5px}
+    .burger span{width:26px;height:2px;background:var(--ink)}
+
+    /* Hero */
+    .hero{padding:clamp(72px,8vw,110px) 0 48px;position:relative;overflow:hidden}
+    .hero-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:48px;align-items:center}
+    .kicker{color:var(--brand);font-weight:700;letter-spacing:.2em;font-size:.75rem;text-transform:uppercase}
+    .title{font-size:clamp(2rem,4.2vw,3.25rem);line-height:1.1;font-weight:800;margin:.5rem 0 1rem}
+    .subtitle{color:var(--muted);max-width:60ch}
+    .cta-row{display:flex;gap:.8rem;margin-top:1.4rem}
+    .btn{display:inline-flex;align-items:center;gap:.55rem;padding:.8rem 1.1rem;border-radius:12px;background:var(--brand);color:#08111e;font-weight:800;box-shadow:var(--shadow);transition:transform var(--speed)}
+    .btn:hover{transform:translateY(-2px)}
+    .btn.secondary{background:transparent;color:var(--ink);border:1px solid var(--line);box-shadow:none}
+
+    .hero-card{background:linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.00));border:1px solid var(--line);border-radius:var(--radius);padding:22px;box-shadow:var(--shadow)}
+    .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:18px}
+    .stat{background:var(--card);border:1px solid var(--line);padding:16px;border-radius:14px;text-align:center}
+    .stat b{font-size:1.5rem}
+    .glow{position:absolute;inset:-30% -10% auto auto;width:60vw;height:60vw;background:radial-gradient(closest-side, rgba(62,166,255,.25), rgba(108,250,203,.18), transparent 70%);filter:blur(20px);pointer-events:none}
+
+    /* Sections */
+    section{padding:72px 0;border-top:1px solid var(--line)}
+    .section-title{font-size:1.75rem;margin-bottom:10px}
+    .section-lead{color:var(--muted);max-width:65ch;margin-bottom:26px}
+
+    /* Cards grid */
+    .grid{display:grid;gap:18px}
+    .grid.cards{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+    .card{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden;display:flex;flex-direction:column;transition:transform var(--speed)}
+    .card:hover{transform:translateY(-4px)}
+    .card img{aspect-ratio:16/9;object-fit:cover}
+    .card .p{padding:16px}
+    .chip{display:inline-block;font-size:.75rem;color:#08111e;background:linear-gradient(90deg,var(--brand),var(--brand-2));padding:.25rem .55rem;border-radius:999px;font-weight:700}
+
+    /* Rocket section */
+    .rocket{position:relative}
+    .rocket .specs{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-top:18px}
+    .spec{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px}
+    .spec small{display:block;color:var(--muted);font-weight:600;letter-spacing:.08em;text-transform:uppercase}
+    .spec b{font-size:1.35rem}
+    .rocket-wrap{display:grid;grid-template-columns:1.1fr .9fr;gap:32px;align-items:center}
+    .rocket .callout{background:linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.00));border:1px solid var(--line);border-radius:var(--radius);padding:18px}
+    .rocket .list{display:grid;gap:10px;margin-top:10px}
+    .rocket .list li{background:var(--card);border:1px dashed var(--line);border-radius:12px;padding:10px 12px}
+
+    /* Subteams */
+    .subteams .item{padding:18px;border-radius:14px;background:linear-gradient(180deg, rgba(255,255,255,.02), transparent);border:1px dashed var(--line)}
+    .subteams h4{margin:.35rem 0}
+    .subteams p{color:var(--muted);font-size:.95rem}
+
+   /* Sponsors ribbon */
+.ribbon {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.00));
+}
+
+.marquee {
+  display: flex;
+  gap: 48px;
+  align-items: center;
+  padding: 16px;
+  animation: scroll 28s linear infinite;
+}
+
+.marquee img {
+  height: 38px;
+  opacity: 0.9;
+  filter: brightness(0) invert(1); /* makes logos white */
+}
+
+@keyframes scroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+    /* Footer */
+    footer{border-top:1px solid var(--line);padding:32px 0 48px;color:var(--muted)}
+    .foot-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:24px}
+    .foot-grid a{color:var(--ink)}
+
+    /* Responsive */
+    @media (max-width:900px){
+      .hero-grid{grid-template-columns:1fr}
+      .stats{grid-template-columns:repeat(3,1fr)}
+      .menu{display:none}
+      .burger{display:flex}
+      .menu.open{position:absolute;left:0;right:0;top:60px;background:var(--card);border-bottom:1px solid var(--line);display:grid;padding:12px}
+      .foot-grid{grid-template-columns:1fr}
+      .rocket-wrap{grid-template-columns:1fr}
+    }
+  
+    body{background:#0b1220;color:#e9f0ff;line-height:1.6;font-family:Inter, "Noto Sans", system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, "Helvetica Neue", Arial, sans-serif; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale}
+    .container{width:min(1100px,92%);margin-inline:auto}
+    header{position:sticky;top:0;background:rgba(11,18,32,.72);backdrop-filter:blur(8px);border-bottom:1px solid rgba(255,255,255,.08);z-index:50}
+    .nav{display:flex;align-items:center;justify-content:space-between;padding:.9rem 0}
+    .brand{display:flex;align-items:center;gap:.6rem;font-weight:800}
+    .brand-mark{width:30px;height:30px;border-radius:8px;background:conic-gradient(from 210deg,#3ea6ff,#6cfacb)}
+    .menu{display:flex;gap:1.1rem}
+    .menu a{color:#9fb2d9;font-weight:600}
+    .menu a.active,.menu a:hover{color:#e9f0ff}
+    .hero{padding:64px 0 28px}
+    .title{font-size:clamp(1.9rem,4.2vw,2.6rem);line-height:1.15;font-weight:800}
+    .subtitle{color:#9fb2d9;max-width:70ch}
+    .kicker{color:#3ea6ff;font-weight:800;letter-spacing:.2em;text-transform:uppercase;font-size:.75rem}
+    section{padding:54px 0;border-top:1px solid rgba(255,255,255,.08)}
+    .grid{display:grid;gap:18px}
+    .two-col{display:grid;grid-template-columns:1.1fr .9fr;gap:28px;align-items:start}
+    .specs{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:14px}
+    .spec{background:#111a2c;border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:14px}
+    .spec small{display:block;color:#9fb2d9;text-transform:uppercase;letter-spacing:.08em;font-weight:700}
+    .spec b{font-size:1.2rem}
+    .panel{background:#0f182a;border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:18px}
+    .list{display:grid;gap:10px;margin:10px 0 0}
+    .list li{background:#0b1426;border:1px dashed rgba(255,255,255,.08);border-radius:12px;padding:10px 12px}
+    .btn{display:inline-flex;align-items:center;gap:.5rem;background:#3ea6ff;color:#07101f;font-weight:800;border-radius:12px;padding:.7rem 1rem;text-decoration:none}
+    .btn.secondary{background:transparent;color:#e9f0ff;border:1px solid rgba(255,255,255,.12)}
+    .sketchfab-embed-wrapper{position:relative;padding-top:56.25%;border:1px solid rgba(255,255,255,.08);border-radius:16px;overflow:hidden;background:#0b0f1a}
+    .sketchfab-embed-wrapper iframe{position:absolute;inset:0;width:100%;height:100%}
+    h2.section-title{font-size:1.6rem;margin-bottom:8px}
+    h3{font-size:1.25rem;margin:.25rem 0 .5rem}
+    .muted{color:#9fb2d9}
+    .note{font-size:.95rem;color:#9fb2d9}
+    footer{border-top:1px solid rgba(255,255,255,.08);padding:28px 0;color:#9fb2d9}
+    @media (max-width:940px){.two-col{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container nav">
+      <a class="brand" href="index.html">
+        <div class="brand-mark"></div>
+        <span>Project Hermes</span>
+      </a>
+      <nav class="menu" id="menu">
+        <a href="index.html">Home</a>
+        <a href="rockets.html">Rockets</a>
+        <a href="our-team.html">Team</a>
+        <a href="ourmission.html">Mission</a>
+        <a href="headquarters.html">HQ</a>
+      </nav>
+      <button class="burger" id="burger" aria-label="Open menu"><span></span><span></span><span></span></button>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container two-col">
+        <div>
+          <div class="kicker">Czech Rocket Challenge 2025</div>
+          <h1 class="title">Enarxis — Student‑built sounding rocket</h1>
+          <p class="subtitle">Designed for reliability, low cost, and repeatable performance in our debut competition year. Below you’ll find a detailed look at the airframe, recovery (toroidal parachute), manufacturing, simulations, and testing.</p>
+          <div class="specs">
+            <div class="spec"><small>Length</small><b>830 mm</b></div>
+            <div class="spec"><small>Diameter</small><b>49 mm</b></div>
+            <div class="spec"><small>Dry Mass</small><b>675 g</b></div>
+            <div class="spec"><small>Lift‑off Mass</small><b>1062 g</b></div>
+            <div class="spec"><small>Predicted Apogee</small><b>~691 m</b></div>
+            <div class="spec"><small>Descent Velocity</small><b>~5–6 m/s</b></div>
+          </div>
+          <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:14px">
+            <a class="btn" href="assets/models/enarxis.stl" download>Download STL</a>
+            <a class="btn secondary" href="#testing">Skip to Testing</a>
+          </div>
+        </div>
+        <div>
+          <div class="sketchfab-embed-wrapper">
+            <iframe title="ENARXIS (Hermes 2025 rocket for CRC)"
+                    src="https://sketchfab.com/models/7d2b8c9633274029a37c1d73e640db5c/embed?ui_theme=dark&autostart=1&ui_watermark=0&dnt=1"
+                    frameborder="0" allow="autoplay; fullscreen; xr-spatial-tracking"
+                    allowfullscreen mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
+          </div>
+          <p class="note">Tip: drag to rotate, scroll/pinch to zoom. Double‑tap for fullscreen.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Rocket Design -->
+    <section id="design">
+      <div class="container two-col">
+        <div>
+          <h2 class="section-title">Rocket design</h2>
+          <p class="muted">Simple, modular architecture prioritizing reliability over complexity.</p>
+          <div class="panel">
+            <h3>Airframe</h3>
+            <ul class="list">
+              <li><b>Structure:</b> 3D‑printed ABS+ body tubes and bulkheads with bayonet twist‑lock interfaces.</li>
+              <li><b>Fins:</b> ABS+ fins bonded to the motor segment with cyanoacrylate; alignment via printed mounts.</li>
+              <li><b>Rail interfaces:</b> Dual rail buttons placed on water and electronics segments for stable launch guidance.</li>
+              <li><b>Payload:</b> ~216 ml water bladder constrained with a compression spacer to minimize slosh.</li>
+            </ul>
+          </div>
+          <div class="panel" style="margin-top:14px">
+            <h3>Avionics & Comms</h3>
+            <ul class="list">
+              <li>Arduino Nano 33 BLE Sense Rev2 (IMU + MCU)</li>
+              <li>SD data logging</li>
+              <li>SX1278 LoRa — 433 MHz telemetry (≈30 Hz)</li>
+              <li>2S Li‑ion battery, 3.3 V regulator, buzzer w/ transistor driver</li>
+              <li>Ground station: SX1278 + Raspberry Pi Pico W bridge, high‑gain loaded antenna</li>
+            </ul>
+          </div>
+        </div>
+        <div>
+          <div class="panel">
+            <h3>Propulsion & Stability (sim)</h3>
+            <ul class="list">
+              <li><b>Motor:</b> commercial solid rocket motor (CRC‑class)</li>
+              <li><b>Apogee (pred.):</b> ~691 m</li>
+              <li><b>Max accel:</b> ~65 m/s²</li>
+              <li><b>Stability at rail departure:</b> ~0.52 cal; Max stability ~2.73 cal</li>
+            </ul>
+            <p class="note">Values from OpenRocket‑style simulation and team estimates.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Parachute Analysis & Design -->
+    <section id="parachute">
+      <div class="container two-col">
+        <div>
+          <h2 class="section-title">Parachute — analysis & design</h2>
+          <p class="muted">Chosen for high drag per area, compact packing, and stable descent.</p>
+          <div class="panel">
+            <h3>Concept</h3>
+            <ul class="list">
+              <li><b>Type:</b> Toroidal (annular) canopy, central vent for stability</li>
+              <li><b>Why:</b> Higher drag coefficient (~2.0–2.2) vs. hemispherical chutes (~1.0–1.5), smaller pack volume</li>
+              <li><b>Deployment:</b> Spring‑loaded piston; servo‑latched pin releases at apogee</li>
+              <li><b>Backup:</b> Trigger deploy if no apogee detected after ~15 s</li>
+            </ul>
+          </div>
+          <div class="panel" style="margin-top:14px">
+            <h3>Materials & build</h3>
+            <ul class="list">
+              <li>Light nylon canopy (≈50–60 g/m²), low porosity</li>
+              <li>Ring‑shaped gores; double‑stitched (flat‑fell seams)</li>
+              <li>8 suspension lines (mono fishing line ≈0.5 mm) tied to inner & outer rims; central swivel</li>
+              <li>Line length ≈1.5× canopy diameter; reinforced attachment patches</li>
+            </ul>
+          </div>
+        </div>
+        <div>
+          <div class="panel">
+            <h3>CFD & tests (summary)</h3>
+            <ul class="list">
+              <li><b>CFD:</b> Incompressible flow, k‑ε; target descent ~7 m/s; predicted drag ≈11 N (Cd≈2.0–2.2)</li>
+              <li><b>Drop tests:</b> 3‑story building with 1 kg payload; full inflation ≈1 s</li>
+              <li><b>Terminal velocity:</b> ~5–6 m/s (video frame analysis, 240 fps)</li>
+              <li><b>Opening loads:</b> modest; no payload damage (incl. egg‑drop demo)</li>
+            </ul>
+            <p class="note">Deployment device: compressed spring + piston plate; servo unlatches at apogee.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Manufacturing -->
+    <section id="manufacturing">
+      <div class="container two-col">
+        <div>
+          <h2 class="section-title">Manufacturing</h2>
+          <div class="panel">
+            <h3>Process</h3>
+            <ul class="list">
+              <li>ABS+ parts 3D‑printed on Bambu Labs X1C and Creality K1C</li>
+              <li>Typical settings: up to 200 mm/s, 260 °C nozzle; bulkheads at ~85% infill (cubic)</li>
+              <li>Post‑processing: light sanding, fit checks; cyanoacrylate bonding for fins</li>
+            </ul>
+          </div>
+        </div>
+        <div>
+          <div class="panel">
+            <h3>Assembly highlights</h3>
+            <ul class="list">
+              <li>Segmented architecture: motor → water bay → electronics → nose</li>
+              <li>Connector rings with captive nuts; bayonet locks on avionics bulkheads</li>
+              <li>Water payload constrained with spacer to limit slosh</li>
+              <li>Dual rail buttons aligned across segments</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Analysis & Testing -->
+    <section id="testing">
+      <div class="container two-col">
+        <div>
+          <h2 class="section-title">Rocket analysis & testing</h2>
+          <div class="panel">
+            <h3>Sim results</h3>
+            <ul class="list">
+              <li>Apogee (pred.): ~691 m</li>
+              <li>Max acceleration: ~65.1 m/s²</li>
+              <li>Stability: ~0.52 cal at rail departure; max ~2.73 cal</li>
+              <li>Descent speed target: ~6.3 m/s</li>
+            </ul>
+          </div>
+          <div class="panel" style="margin-top:14px">
+            <h3>Guides & procedures</h3>
+            <ul class="list">
+              <li>Pre‑flight: technical inspection, scoring committee, parts layout</li>
+              <li>Stepwise assembly from motor segment upward; electronics/altimeter arming sequence</li>
+              <li>Ground station bring‑up; telemetry link check (LoRa 433 MHz)</li>
+              <li>Flight ops: launch, telemetry monitoring, recovery, cleanup, results</li>
+            </ul>
+          </div>
+        </div>
+        <div>
+          <div class="panel">
+            <h3>Recovery testing</h3>
+            <ul class="list">
+              <li>Spring‑ejection reliability validated in repeated ground tests</li>
+              <li>Drop tests confirm fast inflation and stable descent</li>
+              <li>Backup deploy logic: trigger after ~15 s if no apogee detection</li>
+            </ul>
+            <p class="note">Video analysis at 240 fps used to estimate velocity/acceleration profiles.</p>
+          </div>
+          <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:12px">
+            <a class="btn" href="#top" onclick="window.scrollTo({top:0,behavior:'smooth'})">Back to top</a>
+            <a class="btn secondary" href="rockets.html">Back to Rockets</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p style="color:#9fb2d9">© 2025 Project Hermes</p>
+    </div>
+  </footer>
+
+  <script>
+    // simple burger only
+    const burger=document.getElementById('burger');
+    const menu=document.getElementById('menu');
+    burger?.addEventListener('click',()=>menu.classList.toggle('open'));
+  </script>
+</body>
+</html>

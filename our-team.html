@@ -1,0 +1,231 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Team - Project Hermes</title>
+  <meta name="description" content="Student rocketry team — engineering, research, and competition projects." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#0a0f1a;          /* deep navy */
+      --card:#0f1624;       /* slightly lighter navy */
+      --ink:#e6f0ff;        /* light ink */
+      --muted:#91a4c9;      /* muted text */
+      --brand:#3ea6ff;      /* accent blue */
+      --brand-2:#6cfacb;    /* accent mint */
+      --line:rgba(255,255,255,.08);
+      --shadow:0 10px 30px rgba(0,0,0,.35);
+      --radius:20px;
+      --speed:.25s;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%}
+    body{font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Helvetica Neue",Arial,sans-serif;background:radial-gradient(80% 60% at 10% 10%, #0d1a2b 0%, var(--bg) 60%) fixed;color:var(--ink);line-height:1.6}
+    a{color:inherit;text-decoration:none}
+    img{max-width:100%;display:block}
+
+    /* Layout */
+    .container{width:min(1200px,92%);margin-inline:auto}
+    header{position:sticky;top:0;backdrop-filter:blur(8px);background:linear-gradient(180deg, rgba(10,15,26,.9), rgba(10,15,26,.6));border-bottom:1px solid var(--line);z-index:50}
+    .nav{display:flex;align-items:center;justify-content:space-between;padding:.9rem 0}
+    .brand{display:flex;align-items:center;gap:.75rem;font-weight:800;letter-spacing:.3px}
+    .brand-mark{width:34px;height:34px;border-radius:9px;background:conic-gradient(from 210deg, var(--brand), var(--brand-2));box-shadow:0 0 0 2px rgba(255,255,255,.08) inset}
+    .brand span{opacity:.9}
+    .menu{display:flex;gap:1.25rem}
+    .menu a{color:var(--muted);font-weight:600;position:relative}
+    .menu a:hover,.menu a.active{color:var(--ink)}
+    .menu a.active::after,.menu a:hover::after{content:"";position:absolute;left:0;right:0;bottom:-8px;height:2px;background:linear-gradient(90deg,var(--brand),var(--brand-2))}
+    .burger{display:none;flex-direction:column;gap:5px}
+    .burger span{width:26px;height:2px;background:var(--ink)}
+
+    /* Hero */
+    .hero{padding:clamp(72px,8vw,110px) 0 48px;position:relative;overflow:hidden}
+    .hero-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:48px;align-items:center}
+    .kicker{color:var(--brand);font-weight:700;letter-spacing:.2em;font-size:.75rem;text-transform:uppercase}
+    .title{font-size:clamp(2rem,4.2vw,3.25rem);line-height:1.1;font-weight:800;margin:.5rem 0 1rem}
+    .subtitle{color:var(--muted);max-width:60ch}
+    .cta-row{display:flex;gap:.8rem;margin-top:1.4rem}
+    .btn{display:inline-flex;align-items:center;gap:.55rem;padding:.8rem 1.1rem;border-radius:12px;background:var(--brand);color:#08111e;font-weight:800;box-shadow:var(--shadow);transition:transform var(--speed)}
+    .btn:hover{transform:translateY(-2px)}
+    .btn.secondary{background:transparent;color:var(--ink);border:1px solid var(--line);box-shadow:none}
+
+    .hero-card{background:linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.00));border:1px solid var(--line);border-radius:var(--radius);padding:22px;box-shadow:var(--shadow)}
+    .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:18px}
+    .stat{background:var(--card);border:1px solid var(--line);padding:16px;border-radius:14px;text-align:center}
+    .stat b{font-size:1.5rem}
+    .glow{position:absolute;inset:-30% -10% auto auto;width:60vw;height:60vw;background:radial-gradient(closest-side, rgba(62,166,255,.25), rgba(108,250,203,.18), transparent 70%);filter:blur(20px);pointer-events:none}
+
+    /* Sections */
+    section{padding:72px 0;border-top:1px solid var(--line)}
+    .section-title{font-size:1.75rem;margin-bottom:10px}
+    .section-lead{color:var(--muted);max-width:65ch;margin-bottom:26px}
+
+    /* Cards grid */
+    .grid{display:grid;gap:18px}
+    .grid.cards{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+    .card{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden;display:flex;flex-direction:column;transition:transform var(--speed)}
+    .card:hover{transform:translateY(-4px)}
+    .card img{aspect-ratio:16/9;object-fit:cover}
+    .card .p{padding:16px}
+    .chip{display:inline-block;font-size:.75rem;color:#08111e;background:linear-gradient(90deg,var(--brand),var(--brand-2));padding:.25rem .55rem;border-radius:999px;font-weight:700}
+
+    /* Rocket section */
+    .rocket{position:relative}
+    .rocket .specs{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-top:18px}
+    .spec{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px}
+    .spec small{display:block;color:var(--muted);font-weight:600;letter-spacing:.08em;text-transform:uppercase}
+    .spec b{font-size:1.35rem}
+    .rocket-wrap{display:grid;grid-template-columns:1.1fr .9fr;gap:32px;align-items:center}
+    .rocket .callout{background:linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.00));border:1px solid var(--line);border-radius:var(--radius);padding:18px}
+    .rocket .list{display:grid;gap:10px;margin-top:10px}
+    .rocket .list li{background:var(--card);border:1px dashed var(--line);border-radius:12px;padding:10px 12px}
+    body{background:#0b1220;color:#e9f0ff;line-height:1.6;font-family:Inter, "Noto Sans", system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, "Helvetica Neue", Arial, sans-serif; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale}
+    .container{width:min(1100px,92%);margin-inline:auto}
+    header{position:sticky;top:0;background:rgba(11,18,32,.72);backdrop-filter:blur(8px);border-bottom:1px solid rgba(255,255,255,.08);z-index:50}
+    .nav{display:flex;align-items:center;justify-content:space-between;padding:.9rem 0}
+    .brand{display:flex;align-items:center;gap:.6rem;font-weight:800}
+    .brand-mark{width:30px;height:30px;border-radius:8px;background:conic-gradient(from 210deg,#3ea6ff,#6cfacb)}
+    .menu{display:flex;gap:1.1rem}
+    .menu a{color:#9fb2d9;font-weight:600}
+    .menu a.active,.menu a:hover{color:#e9f0ff}
+    .burger{display:none;flex-direction:column;gap:5px}
+    .burger span{width:26px;height:2px;background:#e9f0ff}
+
+    .hero{padding:64px 0 28px}
+    .title{font-size:clamp(1.9rem,4.2vw,2.6rem);line-height:1.15;font-weight:800}
+    .subtitle{color:#9fb2d9;max-width:70ch}
+    .kicker{color:#3ea6ff;font-weight:800;letter-spacing:.2em;text-transform:uppercase;font-size:.75rem}
+
+    section{padding:54px 0;border-top:1px solid rgba(255,255,255,.08)}
+    .grid{display:grid;gap:18px}
+    .three{grid-template-columns:repeat(3,1fr)}
+    .two{grid-template-columns:1.1fr .9fr}
+    @media(max-width:960px){.three{grid-template-columns:1fr}.two{grid-template-columns:1fr}.menu{display:none}.burger{display:flex}.menu.open{position:absolute;left:0;right:0;top:56px;background:#0f182a;border-bottom:1px solid rgba(255,255,255,.08);display:grid;padding:12px}}
+
+    .panel{background:#0f182a;border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:18px}
+    .section-title{font-size:1.6rem;margin-bottom:8px}
+    .muted{color:#9fb2d9}
+    .specs{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:14px}
+    .spec{background:#111a2c;border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:14px}
+    .spec small{display:block;color:#9fb2d9;text-transform:uppercase;letter-spacing:.08em;font-weight:700}
+    .spec b{font-size:1.2rem}
+
+    .role-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+    .role{background:#0b1426;border:1px dashed rgba(255,255,255,.08);border-radius:12px;padding:12px}
+
+    footer{border-top:1px solid rgba(255,255,255,.08);padding:28px 0;color:#9fb2d9}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container nav">
+      <a class="brand" href="index.html">
+        <div class="brand-mark"></div>
+        <span>Project Hermes</span>
+      </a>
+      <nav class="menu" id="menu">
+        <a href="index.html">Home</a>
+        <a href="rockets.html">Rockets</a>
+        <a href="our-team.html" class="active">Team</a>
+        <a href="ourmission.html">Mission</a>
+        <a href="headquarters.html">HQ</a>
+      </nav>
+      <button class="burger" id="burger" aria-label="Open menu"><span></span><span></span><span></span></button>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container">
+        <div class="kicker">University of the Peloponnese</div>
+        <h1 class="title">Our Team</h1>
+        <p class="subtitle"><strong>Project Hermes</strong>, launched in 2024 by <strong>Team Hephaestus</strong> with <strong>SimUoPLabs</strong> working as a steategic partner in this venture, advances aerospace technology. We compete in the Czech Rocket Challenge 2025, showcasing engineering skill with rockets built to endure extreme conditions and push rocketry’s boundaries.</p>
+      </div>
+    </section>
+
+    <section>
+      <div class="container grid three">
+        <article class="panel">
+          <h2 class="section-title">Project Hermes</h2>
+          <p class="muted">Integration and systems: architecture, design reviews, manufacturing plan, mission assurance, and program management.</p>
+          <div class="role-list" style="margin-top:10px">
+            <div class="role"><strong>Project Manager</strong><br><span class="muted">Program coordination, schedules, external relations</span></div>
+            <div class="role"><strong>Technical Director</strong><br><span class="muted">System design leadership, reviews, sign‑off</span></div>
+            <div class="role"><strong>Operations Lead</strong><br><span class="muted">Launch ops, logistics, safety & procedures</span></div>
+          </div>
+        </article>
+        <article class="panel">
+          <h2 class="section-title">Team Hephaestus</h2>
+          <p class="muted">Applied engineering and operations — structures, propulsion readiness, procedures, field logistics.</p>
+          <div class="role-list" style="margin-top:10px">
+            <div class="role"><strong>Avionics</strong><br><span class="muted">Flight computer, sensors, logging</span></div>
+            <div class="role"><strong>Software</strong><br><span class="muted">Telemetry, ground apps, data pipelines</span></div>
+                        <div class="role"><strong>Mission Control</strong><br><span class="muted">Checklists, countdown, ground station ops</span></div>
+            
+          </div>
+        </article>
+        <article class="panel">
+          <h2 class="section-title">SimUoPLabs</h2>
+          <p class="muted">Research & development — simulation, avionics, software, telemetry, and data systems.</p>
+          <div class="role-list" style="margin-top:10px">
+            <p class="muted">Applied engineering and operations — structures, propulsion readiness, procedures, field logistics.</p>
+          <div class="role-list" style="margin-top:10px">
+            <div class="role"><strong>Structures</strong><br><span class="muted">Airframe, loads, testing</span></div>
+            <div class="role"><strong>Manufacturing</strong><br><span class="muted">Print, machining, assembly, QA</span></div>
+            <div class="role"><strong>Aerodynamics</strong><br><span class="muted">CFD, stability margins, wind sensitivity</span></div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section>
+      <div class="container">
+        <h2 class="section-title">Sub‑teams</h2>
+        <div class="specs">
+          <div class="spec"><small>Aerodynamics</small><b>CFD · Stability</b><p class="muted">Fins, CP/CG, and envelope.</p></div>
+          <div class="spec"><small>Structures</small><b>ABS+ · Tests</b><p class="muted">Segments, bulkheads, mounts.</p></div>
+          <div class="spec"><small>Avionics</small><b>LoRa · IMU</b><p class="muted">FC, telemetry, logging.</p></div>
+          <div class="spec"><small>Recovery</small><b>Toroidal chute</b><p class="muted">Spring ejection, backup logic.</p></div>
+          <div class="spec"><small>Manufacturing</small><b>X1C · K1C</b><p class="muted">Process, assembly, QA.</p></div>
+          <div class="spec"><small>Mission Control</small><b>Procedures</b><p class="muted">Ground ops, launch.</p></div>
+          <div class="spec"><small>Marketing</small><b>Partners</b><p class="muted">Outreach & sponsorship.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="container">
+        <h2 class="section-title">Get involved</h2>
+        <div class="panel">
+          <div class="grid two" style="align-items:center">
+            <div>
+              <p class="muted">Students, faculty, and partners are welcome. Join us to build flight hardware, run simulations, and support launches.</p>
+            </div>
+            <div style="justify-self:end;display:flex;gap:10px;flex-wrap:wrap">
+              <a class="btn" href="mailto:projecthermesuop@gmail.com">Apply</a>
+              <a class="btn secondary" href="mailto:projecthermesuop@gmail.com">Partner</a>
+              <a class="btn secondary" href="mailto:projecthermesuop@gmail.com">Contact</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p style="color:#9fb2d9">© 2025 Project Hermes</p>
+    </div>
+  </footer>
+
+  <script>
+    // simple burger only
+    const burger=document.getElementById('burger');
+    const menu=document.getElementById('menu');
+    burger?.addEventListener('click',()=>menu.classList.toggle('open'));
+  </script>
+</body>
+</html>
